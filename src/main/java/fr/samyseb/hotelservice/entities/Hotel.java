@@ -1,11 +1,9 @@
 package fr.samyseb.hotelservice.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.net.URL;
 import java.util.List;
@@ -17,6 +15,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter(onMethod = @__(@JsonProperty))
 public class Hotel {
 
     @Id
@@ -26,10 +25,9 @@ public class Hotel {
     private int etoiles;
     @OneToOne(cascade = CascadeType.REMOVE)
     private Adresse adresse;
-    @JsonIgnore
     @OneToMany(cascade = CascadeType.REMOVE)
+    @Getter(onMethod = @__(@JsonIgnore))
     private List<Chambre> chambres;
     private URL url;
-
 
 }
