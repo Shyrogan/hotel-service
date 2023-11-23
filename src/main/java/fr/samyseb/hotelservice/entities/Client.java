@@ -6,26 +6,26 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
-@Table(name = "chambre")
+@Table(name = "client")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter(onMethod = @__(@JsonProperty))
-public class Chambre {
+public class Client {
 
-    // On ne génère pas l'id
     @Id
-    private long numero;
-    private float prix;
-    private int places;
-    @ManyToOne
-    @Getter(onMethod = @__(@JsonIgnore))
-    private Hotel hotel;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+    private String nom;
+    private String prenom;
     @OneToMany
     @Getter(onMethod = @__(@JsonIgnore))
     private List<Reservation> reservations;
+    @OneToOne
+    private CarteBancaire carteBancaire;
 
 }

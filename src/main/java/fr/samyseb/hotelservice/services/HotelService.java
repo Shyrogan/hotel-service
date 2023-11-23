@@ -8,9 +8,9 @@ import fr.samyseb.hotelservice.repositories.HotelRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,7 @@ import java.net.URL;
 import static java.util.Collections.emptyList;
 
 @Service
+@RequiredArgsConstructor
 public class HotelService {
 
     private static final Logger logger = LoggerFactory.getLogger(HotelApplication.class);
@@ -30,13 +31,6 @@ public class HotelService {
 
     @Getter
     private Hotel identity;
-
-    @Autowired
-    public HotelService(Environment environment, AdresseRepository adresseRepository, HotelRepository repository) {
-        this.environment = environment;
-        this.adresseRepository = adresseRepository;
-        this.hotelRepository = repository;
-    }
 
     /**
      * Lors du démarrage de l'application, on récupère l'identité de l'hôtel dans l'environnement,

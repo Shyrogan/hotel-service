@@ -5,27 +5,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
-@Table(name = "chambre")
+@Table(name = "carteBancaire")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter(onMethod = @__(@JsonProperty))
-public class Chambre {
+public class CarteBancaire {
 
-    // On ne génère pas l'id
     @Id
-    private long numero;
-    private float prix;
-    private int places;
-    @ManyToOne
+    @Column(length = 20)
+    private String numero;
+    private int mois;
+    private int annee;
+    @Column(length = 3)
+    private String cryptogramme;
+    @OneToOne
     @Getter(onMethod = @__(@JsonIgnore))
-    private Hotel hotel;
-    @OneToMany
-    @Getter(onMethod = @__(@JsonIgnore))
-    private List<Reservation> reservations;
+    private Client client;
 
 }
