@@ -28,6 +28,8 @@ public class ReservationController {
     }
 
     @PatchMapping("/")
-    public Reservation updateReservation()
+    public Reservation updateReservation() {
+        return null;
+    }
 
 }

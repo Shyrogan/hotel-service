@@ -10,27 +10,22 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "hotel")
+@Table(name = "agence")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter(onMethod = @__(@JsonProperty))
-public class Hotel {
+public class Agence {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String nom;
-    private int etoiles;
-    @OneToOne(cascade = CascadeType.REMOVE)
-    private Adresse adresse;
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @Getter(onMethod = @__(@JsonIgnore))
-    private List<Chambre> chambres;
-    @OneToMany(cascade = CascadeType.REMOVE)
+    private String motDePasse;
+    private URL url;
+    @OneToMany
     @Getter(onMethod = @__(@JsonIgnore))
     private List<Reservation> reservations;
-    private URL url;
 
 }

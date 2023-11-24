@@ -20,6 +20,8 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @ManyToOne
+    private Agence agence;
+    @ManyToOne
     private Hotel hotel;
     @ManyToOne
     private Chambre chambre;

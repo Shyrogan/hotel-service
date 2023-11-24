@@ -39,7 +39,7 @@ public class HotelService {
     @PostConstruct
     public void onStartup() throws MalformedURLException {
         identity = hotelRepository.save(Hotel.builder()
-                .name(environment.getRequiredProperty("hotel.name"))
+                .nom(environment.getRequiredProperty("hotel.name"))
                 .etoiles(environment.getRequiredProperty("hotel.etoiles", Integer.class))
                 .adresse(adresseRepository.save(Adresse.builder()
                         .numero(environment.getRequiredProperty("hotel.adresse.numero"))
