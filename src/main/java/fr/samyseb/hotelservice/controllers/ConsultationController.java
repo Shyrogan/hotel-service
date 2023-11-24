@@ -21,7 +21,10 @@ public class ConsultationController {
 
     @GetMapping
     public List<Offre> getOffres(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate debut,
-                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin) {
-        return offreService.create(debut, fin);
+                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin,
+                                 @RequestParam(required = false) Float prixMin,
+                                 @RequestParam(required = false) Float prixMax) {
+        return offreService.create(debut, fin, prixMin, prixMax);
     }
+
 }

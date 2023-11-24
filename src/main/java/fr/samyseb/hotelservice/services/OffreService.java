@@ -22,7 +22,7 @@ public class OffreService {
     private final ChambreRepository chambreRepository;
     private final ReservationRepository reservationRepository;
 
-    public List<Offre> create(LocalDate debut, LocalDate fin) {
+    public List<Offre> create(LocalDate debut, LocalDate fin, Float prixMin, Float prixMax) {
         List<Chambre> chambres = chambreRepository.findByHotelId(hotelService.identity().id());
         List<Offre> offres = new ArrayList<>();
 
@@ -38,8 +38,10 @@ public class OffreService {
                 long nombreNuits = ChronoUnit.DAYS.between(debutDispo, fin);
                 float prixTotal = prixParNuit * nombreNuits;
 
-                Offre offre = new Offre(hotelService.identity(), prixTotal, chambre, debutDispo, fin);
-                offres.add(offre);
+                if ((prixMin == null || prixTotal >= prixMin) && (prixMax == null || prixTotal <= prixMax)) {
+                    Offre offre = new Offre(hotelService.identity(), prixTotal, chambre, debutDispo, fin);
+                    offres.add(offre);
+                }
             }
         }
 
