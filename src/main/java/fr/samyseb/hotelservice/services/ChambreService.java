@@ -7,6 +7,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,14 +21,14 @@ public class ChambreService {
 
     private final HotelService hotelService;
     private final ChambreRepository chambreRepository;
+    private final Environment environment;
 
-    @Value("${hotel.initialChambres}")
-    private int initialChambres;
 
     private List<Chambre> chambres = new ArrayList<>();
 
     @PostConstruct
     public void initChambres() {
+        int initialChambres = environment.getProperty("hotel.initialChambres", Integer.class);
         Random random = new Random();
         Hotel hotel = hotelService.identity(); // Obtenez l'instance de l'hôtel
         for (int i = 0; i < initialChambres; i++) {
