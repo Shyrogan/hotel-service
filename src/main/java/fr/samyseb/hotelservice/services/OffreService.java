@@ -48,7 +48,7 @@ public class OffreService {
         return offres;
     }
 
-    private LocalDate trouverDebutDisponible(List<Reservation> reservations, LocalDate debut, LocalDate fin) {
+    public LocalDate trouverDebutDisponible(List<Reservation> reservations, LocalDate debut, LocalDate fin) {
         LocalDate debutDispo = debut;
 
         for (Reservation reservation : reservations) {
@@ -64,7 +64,7 @@ public class OffreService {
         return debutDispo.isAfter(fin) ? null : debutDispo;
     }
 
-    private boolean chevauche(Reservation reservation, LocalDate debut, LocalDate fin) {
+    public boolean chevauche(Reservation reservation, LocalDate debut, LocalDate fin) {
         return !(reservation.fin().isBefore(debut) || reservation.debut().isAfter(fin));
     }
 
