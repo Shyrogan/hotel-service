@@ -1,13 +1,12 @@
 package fr.samyseb.hotelservice.controllers;
 
-import fr.samyseb.hotelservice.dtos.ClientDto;
-import fr.samyseb.hotelservice.dtos.OffreDto;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.samyseb.hotelservice.entities.Client;
 import fr.samyseb.hotelservice.entities.Reservation;
 import fr.samyseb.hotelservice.pojos.Offre;
 import fr.samyseb.hotelservice.repositories.ReservationRepository;
 import fr.samyseb.hotelservice.services.ReservationService;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
@@ -37,7 +36,7 @@ public class ReservationController {
         UUID agenceId = UUID.fromString(credentials[0]);
         String agencePassword = credentials.length > 1 ? credentials[1] : "";
 
-        return reservationService.reserver(request.getOffre().toEntity(), request.getClient().toEntity(), agenceId, agencePassword);
+        return reservationService.reserver(request.offre(), request.client(), agenceId, agencePassword);
     }
 
     @PatchMapping("/")
@@ -52,21 +51,13 @@ public class ReservationController {
         return decodedCredentials.split(":", 2);
     }
 
-
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter(onMethod = @__(@JsonProperty))
     public static class ReservationRequest {
-        private OffreDto offre;
-        private ClientDto client;
-
-        public ReservationRequest() {
-        }
-
-        public OffreDto getOffre() {
-            return offre;
-        }
-
-        public ClientDto getClient() {
-            return client;
-        }
+        private Offre offre;
+        private Client client;
     }
-
 }
