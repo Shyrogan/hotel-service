@@ -17,19 +17,13 @@ public class HotelDto {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public String getNom() {
         return nom;
     }
 
-
     public int getEtoiles() {
         return etoiles;
     }
-
 
     public AdresseDto getAdresse() {
         return adresse;

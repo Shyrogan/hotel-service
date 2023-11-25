@@ -12,24 +12,12 @@ public class ChambreDto {
         return numero;
     }
 
-    public void setNumero(long numero) {
-        this.numero = numero;
-    }
-
     public float getPrix() {
         return prix;
     }
 
-    public void setPrix(float prix) {
-        this.prix = prix;
-    }
-
     public int getPlaces() {
         return places;
-    }
-
-    public void setPlaces(int places) {
-        this.places = places;
     }
 
     public Chambre toEntity() {

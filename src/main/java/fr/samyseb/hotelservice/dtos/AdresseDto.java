@@ -22,19 +22,13 @@ public class AdresseDto {
         return numero;
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
     public String getRue() {
         return rue;
     }
 
-
     public String getVille() {
         return ville;
     }
-
 
     public String getPays() {
         return pays;
