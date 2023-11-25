@@ -1,10 +1,10 @@
 package fr.samyseb.hotelservice.services;
 
-import fr.samyseb.hotelservice.dtos.ClientDto;
-import fr.samyseb.hotelservice.dtos.OffreDto;
+import fr.samyseb.hotelservice.entities.Agence;
 import fr.samyseb.hotelservice.entities.Client;
 import fr.samyseb.hotelservice.entities.Reservation;
 import fr.samyseb.hotelservice.pojos.Offre;
+import fr.samyseb.hotelservice.repositories.AgenceRepository;
 import fr.samyseb.hotelservice.repositories.ChambreRepository;
 import fr.samyseb.hotelservice.repositories.ClientRepository;
 import fr.samyseb.hotelservice.repositories.ReservationRepository;
@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,9 +22,18 @@ public class ReservationService {
     private final OffreService offreService;
     private final ChambreRepository chambreRepository;
     private final ClientRepository clientRepository;
+    private final AgenceRepository agenceRepository;
     private final ReservationRepository reservationRepository;
 
-    public Reservation reserver(Offre offre, Client fillableClient) {
+    public Reservation reserver(Offre offre, Client fillableClient, UUID agenceId, String agencePassword) {
+
+        Agence agence = agenceRepository.findById(agenceId)
+                .orElseThrow(() -> new IllegalArgumentException("Agence introuvable"));
+
+        if (!agence.motDePasse().equals(agencePassword)) {
+            throw new IllegalArgumentException("Mot de passe incorrect");
+        }
+
         // L'hôtel est bien celui-ci
         if (!hotelService.identity().id().equals(offre.hotel().id())) {
             throw new IllegalArgumentException("hotel");
@@ -51,6 +61,7 @@ public class ReservationService {
 
         return reservationRepository.save(Reservation.builder()
                 .hotel(offre.hotel())
+                .agence(agence)
                 .chambre(chambre)
                 .debut(offre.debut())
                 .fin(offre.fin())
