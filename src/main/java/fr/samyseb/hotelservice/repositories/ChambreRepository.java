@@ -12,4 +12,8 @@ public interface ChambreRepository extends CrudRepository<Chambre, Long> {
 
 
     List<Chambre> findByHotelId(UUID hotelId);
+
+    Chambre findChambreByNumeroAndHotel_Id(long numero, UUID hotelId);
+
+
 }
