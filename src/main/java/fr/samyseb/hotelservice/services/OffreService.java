@@ -1,9 +1,13 @@
 package fr.samyseb.hotelservice.services;
 
+import fr.samyseb.hotelservice.entities.Agence;
 import fr.samyseb.hotelservice.entities.Chambre;
+import fr.samyseb.hotelservice.entities.Partenariat;
 import fr.samyseb.hotelservice.entities.Reservation;
 import fr.samyseb.hotelservice.pojos.Offre;
+import fr.samyseb.hotelservice.repositories.AgenceRepository;
 import fr.samyseb.hotelservice.repositories.ChambreRepository;
+import fr.samyseb.hotelservice.repositories.PartenariatRepository;
 import fr.samyseb.hotelservice.repositories.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,8 +15,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +26,24 @@ public class OffreService {
     private final HotelService hotelService;
     private final ChambreRepository chambreRepository;
     private final ReservationRepository reservationRepository;
+    private final AgenceRepository agenceRepository;
+    private final PartenariatRepository partenariatRepository;
 
-    public List<Offre> create(LocalDate debut, LocalDate fin, Float prixMin, Float prixMax) {
+
+    public List<Offre> create(LocalDate debut, LocalDate fin, Float prixMin, Float prixMax, UUID agenceId, String agencePassword) {
+        // Vérification de l'agence
+        Agence agence = agenceRepository.findById(agenceId)
+                .orElseThrow(() -> new IllegalArgumentException("Agence introuvable"));
+
+        if (!agence.motDePasse().equals(agencePassword)) {
+            throw new IllegalArgumentException("Mot de passe incorrect");
+        }
+
+        // Trouver un partenariat entre l'hôtel et l'agence
+        Optional<Partenariat> partenariatOpt = partenariatRepository.findByHotelIdAndAgenceId(hotelService.identity().id(), agenceId);
+
+        float facteurReduction = partenariatOpt.map(Partenariat::reduction).orElse(1.0f);
+
         List<Chambre> chambres = chambreRepository.findByHotelId(hotelService.identity().id());
         List<Offre> offres = new ArrayList<>();
 
@@ -36,7 +57,7 @@ public class OffreService {
             if (debutDispo != null && !debutDispo.isAfter(fin)) {
                 float prixParNuit = chambre.prix();
                 long nombreNuits = ChronoUnit.DAYS.between(debutDispo, fin);
-                float prixTotal = prixParNuit * nombreNuits;
+                float prixTotal = prixParNuit * nombreNuits * facteurReduction;
 
                 if ((prixMin == null || prixTotal >= prixMin) && (prixMax == null || prixTotal <= prixMax)) {
                     Offre offre = new Offre(hotelService.identity(), prixTotal, chambre, debutDispo, fin);
@@ -48,7 +69,7 @@ public class OffreService {
         return offres;
     }
 
-    private LocalDate trouverDebutDisponible(List<Reservation> reservations, LocalDate debut, LocalDate fin) {
+    public LocalDate trouverDebutDisponible(List<Reservation> reservations, LocalDate debut, LocalDate fin) {
         LocalDate debutDispo = debut;
 
         for (Reservation reservation : reservations) {
@@ -64,7 +85,7 @@ public class OffreService {
         return debutDispo.isAfter(fin) ? null : debutDispo;
     }
 
-    private boolean chevauche(Reservation reservation, LocalDate debut, LocalDate fin) {
+    public boolean chevauche(Reservation reservation, LocalDate debut, LocalDate fin) {
         return !(reservation.fin().isBefore(debut) || reservation.debut().isAfter(fin));
     }
 

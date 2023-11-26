@@ -26,6 +26,10 @@ public class Agence {
     private URL url;
     @OneToMany
     @Getter(onMethod = @__(@JsonIgnore))
+    @JsonIgnore
     private List<Reservation> reservations;
+    @OneToMany(mappedBy = "agence", cascade = CascadeType.REMOVE)
+    @Getter(onMethod = @__(@JsonIgnore))
+    private List<Partenariat> partenariats;
 
 }

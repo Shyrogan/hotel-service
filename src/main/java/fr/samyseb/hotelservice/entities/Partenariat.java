@@ -5,29 +5,29 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.util.UUID;
 
 @Entity
-@Table(name = "chambre")
+@Table(name = "partenariat")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter(onMethod = @__(@JsonProperty))
-public class Chambre {
-
+public class Partenariat {
 
     @Id
-    private long numero;
-    private float prix;
-    private int places;
-    @ManyToOne
-    @Getter(onMethod = @__(@JsonIgnore))
-    private Hotel hotel;
-    @Lob
-    private byte[] image;
-    @OneToMany
-    @Getter(onMethod = @__(@JsonIgnore))
-    private List<Reservation> reservations;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
+    @ManyToOne
+    @JoinColumn(name = "hotel_id")
+    private Hotel hotel;
+
+    @ManyToOne
+    @JoinColumn(name = "agence_id")
+    @JsonIgnore
+    private Agence agence;
+
+    private float reduction;
 }
