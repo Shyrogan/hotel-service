@@ -20,13 +20,11 @@ public class ConsultationController {
     private final OffreService offreService;
 
     @GetMapping
-    public List<Offre> getOffres(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate debut,
+    public List<Offre> getOffres(@RequestHeader("Authorization") String authHeader,
+                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate debut,
                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin,
                                  @RequestParam(required = false) Float prixMin,
-                                 @RequestParam(required = false) Float prixMax,
-                                 @RequestHeader("Authorization") String authHeader) {
-
-
+                                 @RequestParam(required = false) Float prixMax) {
         String[] credentials = decodeBasicAuth(authHeader);
         UUID agenceId = UUID.fromString(credentials[0]);
         String agencePassword = credentials.length > 1 ? credentials[1] : "";

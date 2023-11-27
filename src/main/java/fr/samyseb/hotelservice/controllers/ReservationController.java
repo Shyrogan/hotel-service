@@ -28,10 +28,8 @@ public class ReservationController {
     }
 
     @PostMapping("/")
-    public Reservation createReservation(@RequestBody ReservationRequest request,
-                                         @RequestHeader("Authorization") String authHeader) {
-
-
+    public Reservation createReservation(@RequestHeader("Authorization") String authHeader,
+                                         @RequestBody ReservationRequest request) {
         String[] credentials = decodeBasicAuth(authHeader);
         UUID agenceId = UUID.fromString(credentials[0]);
         String agencePassword = credentials.length > 1 ? credentials[1] : "";

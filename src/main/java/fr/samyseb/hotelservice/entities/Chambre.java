@@ -25,6 +25,7 @@ public class Chambre {
     @Getter(onMethod = @__(@JsonIgnore))
     private Hotel hotel;
     @Lob
+    @Getter(onMethod = @__(@JsonIgnore))
     private byte[] image;
     @OneToMany
     @Getter(onMethod = @__(@JsonIgnore))
