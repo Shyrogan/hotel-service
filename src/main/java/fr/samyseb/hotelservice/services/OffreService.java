@@ -60,7 +60,7 @@ public class OffreService {
                 float prixTotal = prixParNuit * nombreNuits * facteurReduction;
 
                 if ((prixMin == null || prixTotal >= prixMin) && (prixMax == null || prixTotal <= prixMax)) {
-                    Offre offre = new Offre(hotelService.identity(), prixTotal, chambre, debutDispo, fin);
+                    Offre offre = new Offre(agence, hotelService.identity(), prixTotal, chambre, debutDispo, fin);
                     offres.add(offre);
                 }
             }

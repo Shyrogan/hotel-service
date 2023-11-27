@@ -1,12 +1,10 @@
 package fr.samyseb.hotelservice.controllers;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.samyseb.hotelservice.entities.Client;
 import fr.samyseb.hotelservice.entities.Reservation;
-import fr.samyseb.hotelservice.pojos.Offre;
+import fr.samyseb.hotelservice.pojos.ReservationRequest;
 import fr.samyseb.hotelservice.repositories.ReservationRepository;
 import fr.samyseb.hotelservice.services.ReservationService;
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
@@ -50,13 +48,4 @@ public class ReservationController {
         return decodedCredentials.split(":", 2);
     }
 
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Getter(onMethod = @__(@JsonProperty))
-    public static class ReservationRequest {
-        private Offre offre;
-        private Client client;
-    }
 }
