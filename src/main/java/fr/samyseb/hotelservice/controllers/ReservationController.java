@@ -27,13 +27,14 @@ public class ReservationController {
         return reservationRepository.findAllByChambreNumero(chambre);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public Reservation createReservation(@RequestHeader("Authorization") String authHeader,
                                          @RequestBody ReservationRequest request) {
         String[] credentials = decodeBasicAuth(authHeader);
         UUID agenceId = UUID.fromString(credentials[0]);
         String agencePassword = credentials.length > 1 ? credentials[1] : "";
 
+        System.out.println(request);
         return reservationService.reserver(request.offre(), request.client(), agenceId, agencePassword);
     }
 

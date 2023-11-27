@@ -2,6 +2,7 @@ package fr.samyseb.hotelservice.controllers;
 
 import fr.samyseb.hotelservice.pojos.Offre;
 import fr.samyseb.hotelservice.services.OffreService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class ConsultationController {
     private final OffreService offreService;
 
     @GetMapping
+    @Transactional
     public List<Offre> getOffres(@RequestHeader("Authorization") String authHeader,
                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate debut,
                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin,
