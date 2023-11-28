@@ -43,13 +43,13 @@ public class ReservationService {
         var chambre = chambreRepository.findById(offre.chambre().numero())
                 .orElseThrow(() -> new IllegalArgumentException("chambre"));
 
-        // Soit le client n'a pas d'ID et on l'insère,
-        // soit il en a un et donc on le recherche par son ID.
-        var client = fillableClient.id() == null ?
-                clientRepository.save(fillableClient) :
-                clientRepository.findById(fillableClient.id())
-                        .orElseThrow(() -> new IllegalArgumentException("client"));
 
+        var client = clientRepository.findClientByNomAndPrenomAndCarteBancaire_Numero(
+                fillableClient.nom(), fillableClient.prenom(), fillableClient.carteBancaire().numero());
+        if (client == null) {
+            client = clientRepository.save(fillableClient);
+
+        }
         List<Reservation> chmabreRsv = reservationRepository.findByChambreNumeroAndChambreHotelId(offre.chambre().numero(), hotelService.identity().id());
         for (Reservation rsv : chmabreRsv) {
             if (offreService.chevauche(rsv, offre.debut(), offre.fin())) {
