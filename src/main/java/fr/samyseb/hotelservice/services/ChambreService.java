@@ -71,6 +71,11 @@ public class ChambreService {
         }
     }
 
+    @PostConstruct
+    public void removeChambres() {
+        chambreRepository.deleteAll();
+    }
+
     public byte[] readImageAsBytes(String imagePath) {
         try (InputStream is = getClass().getResourceAsStream(imagePath)) {
             if (is == null) {
