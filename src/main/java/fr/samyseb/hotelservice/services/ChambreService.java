@@ -76,7 +76,7 @@ public class ChambreService {
 
     @PostConstruct
     public void removeChambres() {
-        chambreRepository.deleteAll();
+        chambreRepository.deleteAllByHotel(hotelService.identity());
     }
 
     public byte[] readImageAsBytes(String imagePath) {
