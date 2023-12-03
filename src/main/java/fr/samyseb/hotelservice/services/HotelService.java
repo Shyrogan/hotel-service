@@ -62,6 +62,7 @@ public class HotelService {
     @PreDestroy
     public void onShutdown() {
         hotelRepository.delete(identity);
+        adresseRepository.delete(identity.adresse());
         logger.info("Suppression de l'hôtel dans la liste des hôtels effectuée.");
     }
 

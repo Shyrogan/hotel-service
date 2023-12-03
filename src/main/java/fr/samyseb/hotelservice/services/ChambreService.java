@@ -5,6 +5,7 @@ import fr.samyseb.hotelservice.entities.Hotel;
 import fr.samyseb.hotelservice.repositories.ChambreRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +14,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 @Service
+@DependsOn("hotelService")
 @RequiredArgsConstructor
 public class ChambreService {
-
 
     private final HotelService hotelService;
     private final ChambreRepository chambreRepository;
@@ -62,6 +64,7 @@ public class ChambreService {
             // Sélectionnez une image aléatoire pour chaque chambre
             int imageIndex = random.nextInt(imageNames.size());
             chambreRepository.save(Chambre.builder()
+                    .id(UUID.randomUUID())
                     .numero(i + 100)
                     .prix(prix)
                     .places(places)
