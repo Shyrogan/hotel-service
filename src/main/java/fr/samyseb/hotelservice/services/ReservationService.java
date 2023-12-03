@@ -1,13 +1,11 @@
 package fr.samyseb.hotelservice.services;
 
 import fr.samyseb.hotelservice.entities.Agence;
+import fr.samyseb.hotelservice.entities.CarteBancaire;
 import fr.samyseb.hotelservice.entities.Client;
 import fr.samyseb.hotelservice.entities.Reservation;
 import fr.samyseb.hotelservice.pojos.Offre;
-import fr.samyseb.hotelservice.repositories.AgenceRepository;
-import fr.samyseb.hotelservice.repositories.ChambreRepository;
-import fr.samyseb.hotelservice.repositories.ClientRepository;
-import fr.samyseb.hotelservice.repositories.ReservationRepository;
+import fr.samyseb.hotelservice.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +19,7 @@ public class ReservationService {
     private final HotelService hotelService;
     private final OffreService offreService;
     private final ChambreRepository chambreRepository;
+    private final CarteBancaireRepository carteBancaireRepository;
     private final ClientRepository clientRepository;
     private final AgenceRepository agenceRepository;
     private final ReservationRepository reservationRepository;
@@ -47,6 +46,9 @@ public class ReservationService {
         var client = clientRepository.findClientByNomAndPrenomAndCarteBancaire_Numero(
                 fillableClient.nom(), fillableClient.prenom(), fillableClient.carteBancaire().numero());
         if (client == null) {
+
+            CarteBancaire cb = fillableClient.carteBancaire();
+            cb = carteBancaireRepository.save(cb);
             client = clientRepository.save(fillableClient);
 
         }
