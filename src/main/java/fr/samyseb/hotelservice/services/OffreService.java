@@ -44,7 +44,7 @@ public class OffreService {
 
         float facteurReduction = partenariatOpt.map(Partenariat::reduction).orElse(1.0f);
 
-        List<Chambre> chambres = chambreRepository.findByHotelId(hotelService.identity().id());
+        List<Chambre> chambres = chambreRepository.findByHotel(hotelService.identity());
         List<Offre> offres = new ArrayList<>();
 
         for (Chambre chambre : chambres) {

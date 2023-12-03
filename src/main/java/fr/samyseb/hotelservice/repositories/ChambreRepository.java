@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface ChambreRepository extends CrudRepository<Chambre, Long> {
+public interface ChambreRepository extends CrudRepository<Chambre, UUID> {
 
 
-    List<Chambre> findByHotelId(UUID hotelId);
+    List<Chambre> findByHotel(Hotel hotel);
 
-    Chambre findChambreByNumeroAndHotel_Id(long numero, UUID hotelId);
+    Chambre findChambreByNumeroAndHotel(long numero, Hotel hotel);
 
     void deleteAllByHotel(Hotel hotel);
 

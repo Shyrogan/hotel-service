@@ -27,19 +27,19 @@ public class ChambreController {
     @GetMapping("/")
     @Transactional
     public List<Chambre> getChambres() {
-        return chambreRepository.findByHotelId(hotelService.identity().id());
+        return chambreRepository.findByHotel(hotelService.identity());
     }
 
     @GetMapping("/{numero}")
     @Transactional
     public Chambre getChambre(@PathVariable long numero) {
-        return chambreRepository.findChambreByNumeroAndHotel_Id(numero, hotelService.identity().id());
+        return chambreRepository.findChambreByNumeroAndHotel(numero, hotelService.identity());
     }
 
     @GetMapping(value = "/img/{numero}", produces = MediaType.IMAGE_JPEG_VALUE)
     @Transactional
     public ResponseEntity<byte[]> getImgChambre(@PathVariable long numero) {
-        byte[] imageData = chambreRepository.findChambreByNumeroAndHotel_Id(numero, hotelService.identity().id()).image();
+        byte[] imageData = chambreRepository.findChambreByNumeroAndHotel(numero, hotelService.identity()).image();
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageData);
     }
 

@@ -40,7 +40,7 @@ public class ReservationService {
         }
 
         // La chambre existe
-        var chambre = chambreRepository.findById(offre.chambre().numero())
+        var chambre = chambreRepository.findById(offre.chambre().id())
                 .orElseThrow(() -> new IllegalArgumentException("chambre"));
 
 
