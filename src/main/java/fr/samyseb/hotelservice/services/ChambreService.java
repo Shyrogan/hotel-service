@@ -4,6 +4,7 @@ import fr.samyseb.hotelservice.entities.Chambre;
 import fr.samyseb.hotelservice.entities.Hotel;
 import fr.samyseb.hotelservice.repositories.ChambreRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
@@ -74,7 +75,7 @@ public class ChambreService {
         }
     }
 
-    @PostConstruct
+    @PreDestroy
     public void removeChambres() {
         chambreRepository.deleteAllByHotel(hotelService.identity());
     }
