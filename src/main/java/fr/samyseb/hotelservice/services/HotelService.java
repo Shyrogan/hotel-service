@@ -6,7 +6,6 @@ import fr.samyseb.hotelservice.entities.Hotel;
 import fr.samyseb.hotelservice.repositories.AdresseRepository;
 import fr.samyseb.hotelservice.repositories.HotelRepository;
 import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -54,16 +53,6 @@ public class HotelService {
                 .build());
 
         logger.info("L'identité de l'hôtel à été définie à: %s.".formatted(identity()));
-    }
-
-    /**
-     * Supprime l'identité de la base de donnée
-     */
-    @PreDestroy
-    public void onShutdown() {
-        hotelRepository.delete(identity);
-        adresseRepository.delete(identity.adresse());
-        logger.info("Suppression de l'hôtel dans la liste des hôtels effectuée.");
     }
 
 }

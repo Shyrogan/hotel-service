@@ -4,10 +4,8 @@ import fr.samyseb.hotelservice.entities.Chambre;
 import fr.samyseb.hotelservice.entities.Hotel;
 import fr.samyseb.hotelservice.repositories.ChambreRepository;
 import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +16,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@DependsOn("hotelService")
 @RequiredArgsConstructor
 public class ChambreService {
 
@@ -81,12 +78,6 @@ public class ChambreService {
                     .image(image)
                     .build());
         }
-    }
-
-    @PreDestroy
-    @Transactional
-    public void removeChambres() {
-        chambreRepository.deleteAllByHotel(hotelService.identity());
     }
 
     public byte[] readImageAsBytes(String imagePath) {
