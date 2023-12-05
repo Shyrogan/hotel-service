@@ -5,6 +5,7 @@ import fr.samyseb.hotelservice.entities.Hotel;
 import fr.samyseb.hotelservice.repositories.ChambreRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
@@ -15,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @DependsOn("hotelService")
@@ -27,6 +27,7 @@ public class ChambreService {
     private final Environment environment;
 
     @PostConstruct
+    @Transactional
     public void initChambres() throws IOException {
         int initialChambres = environment.getProperty("hotel.initialChambres", Integer.class, 8);
         Random random = new Random();
@@ -83,6 +84,7 @@ public class ChambreService {
     }
 
     @PreDestroy
+    @Transactional
     public void removeChambres() {
         chambreRepository.deleteAllByHotel(hotelService.identity());
     }

@@ -35,31 +35,29 @@ public class ReservationService {
 
         // L'hôtel est bien celui-ci
         if (!hotelService.identity().id().equals(offre.hotel().id())) {
-            throw new IllegalArgumentException("hotel");
+            throw new IllegalArgumentException("L'hôtel n'est pas le bon indiqué !");
         }
 
         // La chambre existe
         var chambre = chambreRepository.findById(offre.chambre().id())
-                .orElseThrow(() -> new IllegalArgumentException("chambre"));
+                .orElseThrow(() -> new IllegalArgumentException("La chambre n'existe pas !"));
 
 
-        var client = clientRepository.findClientByNomAndPrenomAndCarteBancaire_Numero(
-                fillableClient.nom(), fillableClient.prenom(), fillableClient.carteBancaire().numero());
+        var client = clientRepository.findClientByNomAndPrenomAndCarteBancaire(
+                fillableClient.nom(), fillableClient.prenom(), fillableClient.carteBancaire());
         if (client == null) {
-
             CarteBancaire cb = fillableClient.carteBancaire();
             cb = carteBancaireRepository.save(cb);
-            client = clientRepository.save(fillableClient);
+            client = clientRepository.save(fillableClient.carteBancaire(cb));
 
         }
-        List<Reservation> chmabreRsv = reservationRepository.findByChambreNumeroAndChambreHotelId(offre.chambre().numero(), hotelService.identity().id());
-        for (Reservation rsv : chmabreRsv) {
+        var resChambres = reservationRepository.findByChambreNumeroAndChambreHotelId(offre.chambre().numero(), hotelService.identity().id());
+        for (var rsv : resChambres) {
             if (offreService.chevauche(rsv, offre.debut(), offre.fin())) {
                 throw new RuntimeException("chambre non disponibles sur ces dates");
             }
 
         }
-
 
         return reservationRepository.save(Reservation.builder()
                 .hotel(offre.hotel())
