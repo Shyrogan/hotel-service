@@ -3,15 +3,18 @@ package fr.samyseb.hotelservice.services;
 import fr.samyseb.hotelservice.HotelApplication;
 import fr.samyseb.hotelservice.entities.Adresse;
 import fr.samyseb.hotelservice.entities.Hotel;
-import fr.samyseb.hotelservice.repositories.AdresseRepository;
-import fr.samyseb.hotelservice.repositories.HotelRepository;
+import fr.samyseb.hotelservice.repositories.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -27,6 +30,10 @@ public class HotelService {
     private final Environment environment;
     private final AdresseRepository adresseRepository;
     private final HotelRepository hotelRepository;
+    private final ChambreRepository chambreRepository;
+    private final ReservationRepository reservationRepository;
+    private final PartenariatRepository partenariatRepository;
+    private final TransactionTemplate transactionTemplate;
 
     @Getter
     private Hotel identity;
@@ -53,6 +60,26 @@ public class HotelService {
                 .build());
 
         logger.info("L'identité de l'hôtel à été définie à: %s.".formatted(identity()));
+    }
+
+    @PreDestroy
+    public void deleteAllHotelInformation() {
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                try {
+                    reservationRepository.deleteAllByHotel(identity);
+                    chambreRepository.deleteAllByHotel(identity);
+                    partenariatRepository.deleteAllByHotel(identity);
+                    hotelRepository.delete(identity);
+                    adresseRepository.delete(identity.adresse());
+                    logger.info("Suppression de l'hôtel et des données associées dans la liste des hôtels effectuée.");
+                } catch (Exception e) {
+                    logger.error("Erreur lors de la suppression des données de l'hôtel: ", e);
+                    status.setRollbackOnly();
+                }
+            }
+        });
     }
 
 }
